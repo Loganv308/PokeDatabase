@@ -1,4 +1,5 @@
-from langchain_openai import ChatOpenAI
+import chromadb
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import PromptTemplate
 from langchain_classic.retrievers import ContextualCompressionRetriever
 
@@ -16,3 +17,12 @@ class RAGChain:
         self.llm = llm
         self.retriever = retriever
         self.prompt = prompt
+
+    def initVectorStore():
+
+        embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+
+        vector_store = chromadb(
+            collection_name="test_collection",
+            embedding_function=embeddings
+        )

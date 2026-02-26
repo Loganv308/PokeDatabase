@@ -1,10 +1,10 @@
 class DocParser:
 
     def __init__(
-        self,
-        urls: list
+        self,       
     ):
-        self.urls = urls
+        self
 
-    def parse():
-        print()
+    def parse(filePath):
+        with open(filePath, 'r') as f:
+            pokemonData = f.read()

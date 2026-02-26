@@ -9,12 +9,12 @@ API_URL = "https://pokeapi.co/api/v2/pokemon?limit=10000&offset=0"
 FILEPATH = "src\\data\\pokemon_data.json"
 RAWDIRPATH = "src\\data\\raw\\json\\"
 
-def getAPIData():
+async def getAPIData():
     response = requests.get(API_URL)
 
     return response
 
-def getFileSize(filePath: str) -> int:
+async def getFileSize(filePath: str) -> int:
 
     fileSize = os.path.getsize(filePath)
 
@@ -46,7 +46,7 @@ async def main(url_list):
 
         await asyncio.gather(*tasks)
 
-def createJsonDf() -> pd.DataFrame:
+async def createJsonDf() -> pd.DataFrame:
     apiData = getAPIData()
 
     # If response code equals 200...
@@ -56,8 +56,10 @@ def createJsonDf() -> pd.DataFrame:
         pokemonData = apiData.json()
     
         try:
+            # Gets the file size to make sure it's not empty
             jsonFileSize = getFileSize(FILEPATH)
 
+            # If it is empty, write to it.
             if(jsonFileSize == 0):
                 # Creates the .json locally, defined as 'f'.
                 with open(jsonFileSize, 'w') as f:
@@ -76,7 +78,7 @@ def createJsonDf() -> pd.DataFrame:
         # Prints any errors that may occur
         print("Error: " + str(apiData.status_code))
 
-def parseJson(dataFrame: pd.DataFrame) -> list:
+async def parseJson(dataFrame: pd.DataFrame) -> list:
     urls = []
 
     for _, row in dataFrame.iterrows():
