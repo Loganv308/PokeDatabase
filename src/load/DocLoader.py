@@ -1,4 +1,4 @@
-class DocParser:
+class DocLoader:
 
     def __init__(
         self,       
@@ -8,3 +8,6 @@ class DocParser:
     def parse(filePath):
         with open(filePath, 'r') as f:
             pokemonData = f.read()
+            
+            for line in pokemonData:
+                print()

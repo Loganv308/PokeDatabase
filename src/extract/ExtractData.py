@@ -89,6 +89,7 @@ async def parseJson(dataFrame: pd.DataFrame) -> list:
 
     return urls
 
+# For each URL it finds within the "pokemon_data.json", it will iterate and request 10 at a time, then put the pertaining data into the "/raw/json" folder
 if __name__ == "__main__":
     dataframe = createJsonDf()
 
