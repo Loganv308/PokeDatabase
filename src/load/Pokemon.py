@@ -23,8 +23,9 @@ class Pokemon:
         self._spec_defense_base = spec_defense_base
         self._speed_base = speed_base
     
+    # Class instance String
     def __str__(self):
-        return f"{self.name} ID: {self.id} | "
+        return f"Name: {self._name} | ID: {self._id} | Height: {self._height} | Weight: {self._weight} | HP: {self._hp_base} | Attack: {self._attack_base} | Defense: {self._defense_base} | Special Attack: {self._spec_attack_base} | Special Defense: {self._spec_defense_base} | Speed: {self._speed_base}"
 
     # id
     @property
@@ -106,3 +107,94 @@ class Pokemon:
     @speed_base.setter
     def speed_base(self, value):
         self._speed_base = value
+        
+    def categorize_stat(self, value: int) -> str:
+        if value <= 50:
+            return "very low"
+        elif value <= 70:
+            return "low"
+        elif value <= 90:
+            return "average"
+        elif value <= 110:
+            return "high"
+        elif value <= 130:
+            return "very high"
+        else:
+            return "elite"
+        
+    def get_weaknesses(self):
+        pass
+
+    def calculate_stat(self, base: int, level: int, is_hp=False) -> int:
+        if is_hp:
+            return int(((2 * base * level) / 100) + level + 10)
+        return int(((2 * base * level) / 100) + 5)
+    
+    def stats_at_level(self, level: int) -> dict:
+        return {
+            "hp": self.calculate_stat(self.hp_base, level, is_hp=True),
+            "attack": self.calculate_stat(self.attack_base, level),
+            "defense": self.calculate_stat(self.defense_base, level),
+            "spec_attack": self.calculate_stat(self.spec_attack_base, level),
+            "spec_defense": self.calculate_stat(self.spec_defense_base, level),
+            "speed": self.calculate_stat(self.speed_base, level),
+        }
+        
+    def get_strengths(self) -> list:
+        stats = {
+            "HP": self.hp_base,
+            "Attack": self.attack_base,
+            "Defense": self.defense_base,
+            "Special Attack": self.spec_attack_base,
+            "Special Defense": self.spec_defense_base,
+            "Speed": self.speed_base,
+        }
+
+        threshold = 110
+        return [name for name, value in stats.items() if value >= threshold]
+    
+    def get_weaknesses(self) -> list:
+        stats = {
+            "HP": self.hp_base,
+            "Attack": self.attack_base,
+            "Defense": self.defense_base,
+            "Special Attack": self.spec_attack_base,
+            "Special Defense": self.spec_defense_base,
+            "Speed": self.speed_base,
+        }
+
+        threshold = 60
+        return [name for name, value in stats.items() if value <= threshold]
+    
+    def get_role(self) -> str:
+        if self.attack_base >= 120 and self.speed_base >= 100:
+            return "physical sweeper"
+        if self.spec_attack_base >= 120 and self.speed_base >= 100:
+            return "special sweeper"
+        if self.defense_base >= 120 and self.hp_base >= 100:
+            return "physical wall"
+        if self.spec_defense_base >= 120 and self.hp_base >= 100:
+            return "special wall"
+        if self.hp_base >= 120 and self.defense_base >= 100 and self.spec_defense_base >= 100:
+            return "tank"
+        return "balanced attacker"
+    
+    def to_document(self) -> str:
+        strengths = ", ".join(self.get_strengths()) or "none"
+        weaknesses = ", ".join(self.get_weaknesses()) or "none"
+
+        return f"""
+        {self.name} (ID: {self.id})
+
+        Base Stats:
+        HP: {self.hp_base} ({self.categorize_stat(self.hp_base)})
+        Attack: {self.attack_base} ({self.categorize_stat(self.attack_base)})
+        Defense: {self.defense_base} ({self.categorize_stat(self.defense_base)})
+        Special Attack: {self.spec_attack_base} ({self.categorize_stat(self.spec_attack_base)})
+        Special Defense: {self.spec_defense_base} ({self.categorize_stat(self.spec_defense_base)})
+        Speed: {self.speed_base} ({self.categorize_stat(self.speed_base)})
+
+        Strengths: {strengths}
+        Weaknesses: {weaknesses}
+        Battle Role: {self.get_role()}
+        """

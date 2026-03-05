@@ -5,6 +5,7 @@ class DocLoader:
     ):
         self
 
+    # This class is meant to parse each JSON and extract those values, then set them in a Pokemon Object instance. 
     def parse(filePath):
         with open(filePath, 'r') as f:
             pokemonData = f.read()
