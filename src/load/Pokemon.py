@@ -184,17 +184,17 @@ class Pokemon:
         weaknesses = ", ".join(self.get_weaknesses()) or "none"
 
         return f"""
-        {self.name} (ID: {self.id})
+            {self.name} (ID: {self.id})
 
-        Base Stats:
-        HP: {self.hp_base} ({self.categorize_stat(self.hp_base)})
-        Attack: {self.attack_base} ({self.categorize_stat(self.attack_base)})
-        Defense: {self.defense_base} ({self.categorize_stat(self.defense_base)})
-        Special Attack: {self.spec_attack_base} ({self.categorize_stat(self.spec_attack_base)})
-        Special Defense: {self.spec_defense_base} ({self.categorize_stat(self.spec_defense_base)})
-        Speed: {self.speed_base} ({self.categorize_stat(self.speed_base)})
+            Base Stats:
+            HP: {self.hp_base} ({self.categorize_stat(self.hp_base)})
+            Attack: {self.attack_base} ({self.categorize_stat(self.attack_base)})
+            Defense: {self.defense_base} ({self.categorize_stat(self.defense_base)})
+            Special Attack: {self.spec_attack_base} ({self.categorize_stat(self.spec_attack_base)})
+            Special Defense: {self.spec_defense_base} ({self.categorize_stat(self.spec_defense_base)})
+            Speed: {self.speed_base} ({self.categorize_stat(self.speed_base)})
 
-        Strengths: {strengths}
-        Weaknesses: {weaknesses}
-        Battle Role: {self.get_role()}
-        """
+            Strengths: {strengths}
+            Weaknesses: {weaknesses}
+            Battle Role: {self.get_role()}
+            """

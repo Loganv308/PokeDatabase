@@ -35,7 +35,7 @@ async def fetchAndSave(session, semaphore, name, url):
                 
                 print(f"Saved: {name}")
 
-async def main(url_list):
+async def startAPITraverse(url_list):
     semaphore = asyncio.Semaphore(10)
 
     async with aiohttp.ClientSession() as session:
@@ -47,7 +47,7 @@ async def main(url_list):
         await asyncio.gather(*tasks)
 
 async def createJsonDf() -> pd.DataFrame:
-    apiData = getAPIData()
+    apiData = await getAPIData()
 
     # If response code equals 200...
     if(apiData.status_code == 200):
@@ -57,7 +57,7 @@ async def createJsonDf() -> pd.DataFrame:
     
         try:
             # Gets the file size to make sure it's not empty
-            jsonFileSize = getFileSize(FILEPATH)
+            jsonFileSize = await getFileSize(FILEPATH)
 
             # If it is empty, write to it.
             if(jsonFileSize == 0):
@@ -88,11 +88,3 @@ async def parseJson(dataFrame: pd.DataFrame) -> list:
         urls.append((name, url))
 
     return urls
-
-# For each URL it finds within the "pokemon_data.json", it will iterate and request 10 at a time, then put the pertaining data into the "/raw/json" folder
-if __name__ == "__main__":
-    dataframe = createJsonDf()
-
-    urls = parseJson(dataframe)
-
-    results = asyncio.run(main(urls))
