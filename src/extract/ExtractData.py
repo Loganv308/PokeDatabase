@@ -66,7 +66,7 @@ async def createJsonDf() -> pd.DataFrame:
                     # Adding in the "indent" and "ensure_ascii" gives a pretty print to the dumped JSON.
                     json.dump(pokemonData, f, ensure_ascii=False, indent=4)
             else:
-                print("File already exists and contains data, moving on...")
+                print("Master JSON file already exists and contains data, moving on...")
 
             pokemonDf = pd.json_normalize(pokemonData["results"])
 
