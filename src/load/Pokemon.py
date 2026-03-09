@@ -121,9 +121,6 @@ class Pokemon:
             return "very high"
         else:
             return "elite"
-        
-    def get_weaknesses(self):
-        pass
 
     def calculate_stat(self, base: int, level: int, is_hp=False) -> int:
         if is_hp:
@@ -150,8 +147,8 @@ class Pokemon:
             "Speed": self.speed_base,
         }
 
-        threshold = 110
-        return [name for name, value in stats.items() if value >= threshold]
+        avg = sum(stats.values()) / len(stats)
+        return [name for name, value in stats.items() if value >= avg * 1.15]
     
     def get_weaknesses(self) -> list:
         stats = {
@@ -163,21 +160,58 @@ class Pokemon:
             "Speed": self.speed_base,
         }
 
-        threshold = 60
-        return [name for name, value in stats.items() if value <= threshold]
+        avg = sum(stats.values()) / len(stats)
+        return [name for name, value in stats.items() if value <= avg * 0.85]
     
-    def get_role(self) -> str:
-        if self.attack_base >= 120 and self.speed_base >= 100:
-            return "physical sweeper"
-        if self.spec_attack_base >= 120 and self.speed_base >= 100:
-            return "special sweeper"
-        if self.defense_base >= 120 and self.hp_base >= 100:
-            return "physical wall"
-        if self.spec_defense_base >= 120 and self.hp_base >= 100:
-            return "special wall"
-        if self.hp_base >= 120 and self.defense_base >= 100 and self.spec_defense_base >= 100:
-            return "tank"
-        return "balanced attacker"
+    def get_primary_role(self) -> str:
+        ROLE_THRESHOLDS = {
+        "physical_sweeper":  {"Attack": 1.2,  "Speed": 1.15},
+        "special_sweeper":   {"Special Attack": 1.2, "Speed": 1.15},
+        "physical_wall":     {"Defense": 1.2, "HP": 1.1},
+        "special_wall":      {"Special Defense": 1.2, "HP": 1.1},
+        "tank":              {"HP": 1.25, "Defense": 1.1, "Special Defense": 1.1},
+        "wallbreaker":       {"Attack": 1.3, "Special Attack": 1.15},
+        "revenge_killer":    {"Speed": 1.3, "Attack": 1.1},
+        "support":           {"HP": 1.1, "Defense": 1.05, "Special Defense": 1.05},
+        "pivot":             {"Speed": 1.1, "HP": 1.1},
+        }
+
+        GLOBAL_STAT_AVERAGES = {
+            "HP": 69,
+            "Attack": 79,
+            "Defense": 73,
+            "Special Attack": 72,
+            "Special Defense": 71,
+            "Speed": 68,
+        }
+        
+        stats = {
+            "HP": self.hp_base,
+            "Attack": self.attack_base,
+            "Defense": self.defense_base,
+            "Special Attack": self.spec_attack_base,
+            "Special Defense": self.spec_defense_base,
+            "Speed": self.speed_base,
+        }
+
+        role_scores = {}
+
+        for role, requirements in ROLE_THRESHOLDS.items():
+            if all(
+                stats[stat] >= GLOBAL_STAT_AVERAGES[stat] * multiplier
+                for stat, multiplier in requirements.items()
+            ):
+                # Score = average % above threshold across all required stats
+                score = sum(
+                    stats[stat] / (GLOBAL_STAT_AVERAGES[stat] * multiplier)
+                    for stat, multiplier in requirements.items()
+                ) / len(requirements)
+                role_scores[role] = score
+
+        if not role_scores:
+            return "balanced"
+
+        return max(role_scores, key=role_scores.get)
     
     def to_document(self) -> str:
         strengths = ", ".join(self.get_strengths()) or "none"
@@ -196,5 +230,5 @@ class Pokemon:
 
             Strengths: {strengths}
             Weaknesses: {weaknesses}
-            Battle Role: {self.get_role()}
+            Battle Role: {self.get_primary_role()}
             """
