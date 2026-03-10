@@ -1,3 +1,4 @@
 Lib
 share/man/man1/isympy.1
 src/data/raw/json/*
+src/data/docs/*

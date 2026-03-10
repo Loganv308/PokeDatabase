@@ -216,19 +216,18 @@ class Pokemon:
     def to_document(self) -> str:
         strengths = ", ".join(self.get_strengths()) or "none"
         weaknesses = ", ".join(self.get_weaknesses()) or "none"
+        role = self.get_primary_role()
 
-        return f"""
-            {self.name} (ID: {self.id})
-
-            Base Stats:
-            HP: {self.hp_base} ({self.categorize_stat(self.hp_base)})
-            Attack: {self.attack_base} ({self.categorize_stat(self.attack_base)})
-            Defense: {self.defense_base} ({self.categorize_stat(self.defense_base)})
-            Special Attack: {self.spec_attack_base} ({self.categorize_stat(self.spec_attack_base)})
-            Special Defense: {self.spec_defense_base} ({self.categorize_stat(self.spec_defense_base)})
-            Speed: {self.speed_base} ({self.categorize_stat(self.speed_base)})
-
-            Strengths: {strengths}
-            Weaknesses: {weaknesses}
-            Battle Role: {self.get_primary_role()}
-            """
+        return (
+            f"{self.name.capitalize()} (ID: {self.id}) is a {role.replace('_', ' ')} "
+            f"with a base Speed of {self.speed_base} ({self.categorize_stat(self.speed_base)}) "
+            f"and base Attack of {self.attack_base} ({self.categorize_stat(self.attack_base)}). "
+            f"Its strongest stats are {strengths}, while its weaknesses are {weaknesses}. "
+            f"\n\nBase Stats:\n"
+            f"HP: {self.hp_base} ({self.categorize_stat(self.hp_base)})\n"
+            f"Attack: {self.attack_base} ({self.categorize_stat(self.attack_base)})\n"
+            f"Defense: {self.defense_base} ({self.categorize_stat(self.defense_base)})\n"
+            f"Special Attack: {self.spec_attack_base} ({self.categorize_stat(self.spec_attack_base)})\n"
+            f"Special Defense: {self.spec_defense_base} ({self.categorize_stat(self.spec_defense_base)})\n"
+            f"Speed: {self.speed_base} ({self.categorize_stat(self.speed_base)})\n"
+        )

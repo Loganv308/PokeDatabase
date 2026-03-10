@@ -4,10 +4,10 @@ import json
 from load.Pokemon import *
 
 async def main():
-    
     # Raw JSON data directory
     rawJSONDirPath = "src\\data\\raw\\json\\"
-    
+    textFilePath = "src\\data\\docs\\"
+
     # Creates JSON into Dataframe. 
     dataframe = await createJsonDf()
 
@@ -41,14 +41,23 @@ async def main():
 
         pokemon = Pokemon(id, name, height, weight, hpBase, attackBase, defenseBase, specAttackBase, specDefenseBase, speedBase)
         
-        role = pokemon.get_primary_role()
+        statText = pokemon.to_document()
         
-        weaknesses = pokemon.get_weaknesses()
+        statTextPath = textFilePath + f"{pokemon.name}.txt"
         
-        strengths = pokemon.get_strengths()
-        
-        print(id, name, height, weight, hpBase, attackBase, defenseBase, specAttackBase, specDefenseBase, speedBase, "Role:", role, "|" , "Strengths:", strengths, "Weakenesses:" ,weaknesses)
-        
+        # TODO: Add in Move data to each of the files as well. Utilize the Move.py class.
+
+        # TODO: Put into a Chroma DB and Vectorize. Analyze using ChatGPT or another AI API
+
+        with open(statTextPath, "w") as w:
+            if(os.path.getsize(statTextPath) == 0):
+                w.write(statText)
+                print(statTextPath + " created!")
+            else:
+                print(statTextPath + " already exists. Moving on.")
+                pass
+
+            # print(id, name, height, weight, hpBase, attackBase, defenseBase, specAttackBase, specDefenseBase, speedBase, "Role:", role, "|" , "Strengths:", strengths, "Weakenesses:" ,weaknesses)
 
 if __name__ == "__main__":
     asyncio.run(main())    
