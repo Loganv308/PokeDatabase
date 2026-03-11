@@ -11,6 +11,7 @@ class Pokemon:
         spec_attack_base,
         spec_defense_base,
         speed_base,
+        pokemon_Type
     ):
         self._id = id
         self._name = name
@@ -22,10 +23,11 @@ class Pokemon:
         self._spec_attack_base = spec_attack_base
         self._spec_defense_base = spec_defense_base
         self._speed_base = speed_base
+        self._pokemon_Type = pokemon_Type
     
     # Class instance String
     def __str__(self):
-        return f"Name: {self._name} | ID: {self._id} | Height: {self._height} | Weight: {self._weight} | HP: {self._hp_base} | Attack: {self._attack_base} | Defense: {self._defense_base} | Special Attack: {self._spec_attack_base} | Special Defense: {self._spec_defense_base} | Speed: {self._speed_base}"
+        return f"Name: {self._name} | ID: {self._id} | Height: {self._height} | Weight: {self._weight} | HP: {self._hp_base} | Attack: {self._attack_base} | Defense: {self._defense_base} | Special Attack: {self._spec_attack_base} | Special Defense: {self._spec_defense_base} | Speed: {self._speed_base} | Type: {self._pokemon_Type}"
 
     # id
     @property
@@ -108,6 +110,15 @@ class Pokemon:
     def speed_base(self, value):
         self._speed_base = value
         
+    # speed_base
+    @property
+    def pokemonType(self):
+        return self._pokemonType
+    
+    @pokemonType.setter
+    def pokeType(self, value):
+        self._pokemonType = value
+        
     def categorize_stat(self, value: int) -> str:
         if value <= 50:
             return "very low"
@@ -185,6 +196,7 @@ class Pokemon:
             "Speed": 68,
         }
         
+        # Only include int values
         stats = {
             "HP": self.hp_base,
             "Attack": self.attack_base,
@@ -223,6 +235,7 @@ class Pokemon:
             f"with a base Speed of {self.speed_base} ({self.categorize_stat(self.speed_base)}) "
             f"and base Attack of {self.attack_base} ({self.categorize_stat(self.attack_base)}). "
             f"Its strongest stats are {strengths}, while its weaknesses are {weaknesses}. "
+            f"It has the type of {self.pokemonType}, "
             f"\n\nBase Stats:\n"
             f"HP: {self.hp_base} ({self.categorize_stat(self.hp_base)})\n"
             f"Attack: {self.attack_base} ({self.categorize_stat(self.attack_base)})\n"

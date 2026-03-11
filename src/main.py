@@ -26,6 +26,7 @@ async def main():
         fullFilePath = os.path.join(rawJSONDirPath, file)
         
         pokemonJSONData = open(fullFilePath)
+        
         data = json.load(pokemonJSONData)
         
         id = data['id']
@@ -38,26 +39,26 @@ async def main():
         specAttackBase = data['stats'][3]['base_stat']
         specDefenseBase = data['stats'][4]['base_stat']
         speedBase = data['stats'][5]['base_stat']
+        pokeType = data['types'][0]["type"]["name"]
 
-        pokemon = Pokemon(id, name, height, weight, hpBase, attackBase, defenseBase, specAttackBase, specDefenseBase, speedBase)
+        pokemon = Pokemon(id, name, height, weight, hpBase, attackBase, defenseBase, specAttackBase, specDefenseBase, speedBase, pokeType)
         
-        statText = pokemon.to_document()
+        print(pokemon)
         
-        statTextPath = textFilePath + f"{pokemon.name}.txt"
+        # print(id, name, height, weight, hpBase, attackBase, defenseBase, specAttackBase, specDefenseBase, speedBase, pokeType)
         
-        # TODO: Add in Move data to each of the files as well. Utilize the Move.py class.
+        # statText = pokemon.to_document()
+        
+        # statTextPath = textFilePath + f"{pokemon.name}.txt"
+        
+        # # TODO: Add in Move data to each of the files as well. Utilize the Move.py class.
 
-        # TODO: Put into a Chroma DB and Vectorize. Analyze using ChatGPT or another AI API
+        # # TODO: Put into a Chroma DB and Vectorize. Analyze using ChatGPT or another AI API
 
-        with open(statTextPath, "w") as w:
-            if(os.path.getsize(statTextPath) == 0):
-                w.write(statText)
-                print(statTextPath + " created!")
-            else:
-                print(statTextPath + " already exists. Moving on.")
-                pass
+        # with open(statTextPath, "w") as w:
+        #     w.write(statText)
+        #     print(statTextPath + " created!")
 
-            # print(id, name, height, weight, hpBase, attackBase, defenseBase, specAttackBase, specDefenseBase, speedBase, "Role:", role, "|" , "Strengths:", strengths, "Weakenesses:" ,weaknesses)
 
 if __name__ == "__main__":
     asyncio.run(main())    
